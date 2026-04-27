@@ -1,0 +1,10 @@
+services:
+  mysql:
+    image: 'mysql:latest'
+    environment:
+      - 'MYSQL_DATABASE=splearn'
+      - 'MYSQL_PASSWORD=cwchoiit'
+      - 'MYSQL_ROOT_PASSWORD=root'
+      - 'MYSQL_USER=cwchoiit'
+    ports:
+      - '3306:3306'
