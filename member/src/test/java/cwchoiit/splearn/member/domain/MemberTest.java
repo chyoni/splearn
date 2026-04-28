@@ -1,5 +1,7 @@
 package cwchoiit.splearn.member.domain;
 
+import static cwchoiit.splearn.member.domain.MemberFixture.createMemberRegisterPayload;
+import static cwchoiit.splearn.member.domain.MemberFixture.createPasswordEncoder;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -13,23 +15,10 @@ class MemberTest {
 
     @BeforeEach
     void setUp() {
-        passwordEncoder =
-                new PasswordEncoder() {
-                    @Override
-                    public String encode(String password) {
-                        return password.toUpperCase();
-                    }
-
-                    @Override
-                    public boolean matches(String password, String passwordHash) {
-                        return encode(password).equals(passwordHash);
-                    }
-                };
-
+        passwordEncoder = createPasswordEncoder();
         member =
                 Member.register(
-                        new MemberRegisterPayload("noreply@example.com", "cwchoiit", "pw"),
-                        passwordEncoder);
+                        createMemberRegisterPayload("noreply@example.com"), passwordEncoder);
     }
 
     @Test
@@ -109,8 +98,7 @@ class MemberTest {
         assertThatThrownBy(
                         () ->
                                 Member.register(
-                                        new MemberRegisterPayload("invalid", "cwchoiit", "pw"),
-                                        passwordEncoder))
+                                        createMemberRegisterPayload("invalid"), passwordEncoder))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 }

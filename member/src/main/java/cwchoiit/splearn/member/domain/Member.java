@@ -3,18 +3,29 @@ package cwchoiit.splearn.member.domain;
 import static java.util.Objects.requireNonNull;
 import static org.springframework.util.Assert.state;
 
+import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+@Entity
 @Getter
 @ToString
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
-    private Email email;
-    private String nickname;
-    private String passwordHash;
-    private MemberStatus status;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    private Member() {}
+    @Embedded private Email email;
+
+    private String nickname;
+
+    private String passwordHash;
+
+    @Enumerated(EnumType.STRING)
+    private MemberStatus status;
 
     public static Member register(
             MemberRegisterPayload registerPayload, PasswordEncoder passwordEncoder) {
