@@ -16,12 +16,13 @@ public class Member {
 
     private Member() {}
 
-    public static Member create(MemberCreateVo memberCreateVo, PasswordEncoder passwordEncoder) {
+    public static Member register(
+            MemberRegisterPayload registerPayload, PasswordEncoder passwordEncoder) {
         Member member = new Member();
 
-        member.email = new Email(requireNonNull(memberCreateVo.email()));
-        member.nickname = requireNonNull(memberCreateVo.nickname());
-        member.passwordHash = requireNonNull(passwordEncoder.encode(memberCreateVo.password()));
+        member.email = new Email(requireNonNull(registerPayload.email()));
+        member.nickname = requireNonNull(registerPayload.nickname());
+        member.passwordHash = requireNonNull(passwordEncoder.encode(registerPayload.password()));
         member.status = MemberStatus.PENDING;
 
         return member;
