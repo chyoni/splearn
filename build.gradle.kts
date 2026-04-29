@@ -1,3 +1,4 @@
+import com.diffplug.gradle.spotless.SpotlessExtension
 import java.io.BufferedReader
 import java.io.InputStreamReader
 // import net.ltgt.gradle.errorprone.ErrorProneOptions
@@ -89,14 +90,13 @@ subprojects {
         }
     }
 
-    configure<com.diffplug.gradle.spotless.SpotlessExtension> {
+    configure<SpotlessExtension> {
         java {
             target("**/*.java")
             targetExclude("**/generated/**/*.java")
             googleJavaFormat().aosp()
             importOrder()
             endWithNewline()
-            removeUnusedImports()
             trimTrailingWhitespace()
         }
     }
