@@ -1,25 +1,25 @@
 package cwchoiit.splearn.member.application.required;
 
+import static cwchoiit.splearn.member.domain.MemberFixture.createMemberRegisterPayload;
+import static cwchoiit.splearn.member.domain.MemberFixture.createPasswordEncoder;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import cwchoiit.splearn.member.domain.Member;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.transaction.annotation.Transactional;
-
-import static cwchoiit.splearn.member.domain.MemberFixture.createMemberRegisterPayload;
-import static cwchoiit.splearn.member.domain.MemberFixture.createPasswordEncoder;
-import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
 @SpringBootTest
 class MemberRepositoryTest {
 
-    @Autowired
-    MemberRepository memberRepository;
+    @Autowired MemberRepository memberRepository;
 
-    @Autowired
-    EntityManager entityManager;
+    @Autowired EntityManager entityManager;
 
     @Test
     void createMember() {
@@ -34,5 +34,22 @@ class MemberRepositoryTest {
         entityManager.flush();
 
         assertThat(member.getId()).isNotNull();
+    }
+
+    @Test
+    void duplicateEmailFail() {
+        Member member =
+                Member.register(
+                        createMemberRegisterPayload("noreply@example.com"),
+                        createPasswordEncoder());
+        memberRepository.save(member);
+
+        Member duplicateEmailMember =
+                Member.register(
+                        createMemberRegisterPayload("noreply@example.com"),
+                        createPasswordEncoder());
+
+        assertThatThrownBy(() -> memberRepository.save(duplicateEmailMember))
+                .isInstanceOf(DataIntegrityViolationException.class);
     }
 }
