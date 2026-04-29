@@ -4,10 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import cwchoiit.splearn.member.SplearnTestConfiguration;
-import cwchoiit.splearn.member.domain.DuplicateEmailException;
-import cwchoiit.splearn.member.domain.Member;
-import cwchoiit.splearn.member.domain.MemberFixture;
-import cwchoiit.splearn.member.domain.MemberStatus;
+import cwchoiit.splearn.member.domain.*;
+import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -41,5 +39,17 @@ class MemberRegisterUseCaseSpringBootTest {
                                         MemberFixture.createMemberRegisterPayload(
                                                 "noreply@example.com")))
                 .isInstanceOf(DuplicateEmailException.class);
+    }
+
+    @Test
+    void memberRegisterPayloadFail() {
+        extracted(new MemberRegisterPayload("noreply@example.com", "c", "long_password"));
+        extracted(new MemberRegisterPayload("noreply@example.com", "cwchoiit", "pw"));
+        extracted(new MemberRegisterPayload("invalid", "cwchoiit", "long_password"));
+    }
+
+    private void extracted(MemberRegisterPayload invalid) {
+        assertThatThrownBy(() -> memberRegisterUseCase.register(invalid))
+                .isInstanceOf(ConstraintViolationException.class);
     }
 }

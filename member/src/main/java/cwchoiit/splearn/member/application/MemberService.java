@@ -4,11 +4,16 @@ import cwchoiit.splearn.member.application.provided.MemberRegisterUseCase;
 import cwchoiit.splearn.member.application.required.EmailSender;
 import cwchoiit.splearn.member.application.required.MemberRepository;
 import cwchoiit.splearn.member.domain.*;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 
 @Service
+@Validated
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class MemberService implements MemberRegisterUseCase {
 
     private final MemberRepository memberRepository;
@@ -16,7 +21,8 @@ public class MemberService implements MemberRegisterUseCase {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public Member register(MemberRegisterPayload memberRegisterPayload) {
+    @Transactional
+    public Member register(@Valid MemberRegisterPayload memberRegisterPayload) {
         checkDuplicateEmail(memberRegisterPayload);
 
         Member member = Member.register(memberRegisterPayload, passwordEncoder);

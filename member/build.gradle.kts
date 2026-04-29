@@ -7,9 +7,9 @@ dependencies {
 
     implementation(libs.spring.boot.data.jpa)
     implementation(libs.mysql.connector)
+    implementation(libs.spring.boot.validation)
 
     testImplementation(libs.spring.boot.starter.test)
-    testImplementation(libs.mockito.core)
     runtimeOnly(libs.h2)
 }
 

@@ -5,7 +5,7 @@ import org.jspecify.annotations.NonNull;
 public class MemberFixture {
 
     public static @NonNull MemberRegisterPayload createMemberRegisterPayload(String email) {
-        return new MemberRegisterPayload(email, "cwchoiit", "pw");
+        return new MemberRegisterPayload(email, "cwchoiit", "long_password");
     }
 
     public static @NonNull PasswordEncoder createPasswordEncoder() {

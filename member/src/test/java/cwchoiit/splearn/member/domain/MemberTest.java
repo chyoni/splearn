@@ -60,7 +60,7 @@ class MemberTest {
 
     @Test
     void verifyPassword() {
-        assertThat(member.verifyPassword("pw", passwordEncoder)).isTrue();
+        assertThat(member.verifyPassword("long_password", passwordEncoder)).isTrue();
         assertThat(member.verifyPassword("failed", passwordEncoder)).isFalse();
     }
 
