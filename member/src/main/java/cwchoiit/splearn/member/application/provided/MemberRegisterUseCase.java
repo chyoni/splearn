@@ -7,4 +7,6 @@ import jakarta.validation.Valid;
 /** 회원을 등록한다. */
 public interface MemberRegisterUseCase {
     Member register(@Valid MemberRegisterPayload memberRegisterPayload);
+
+    Member activate(Long memberId);
 }

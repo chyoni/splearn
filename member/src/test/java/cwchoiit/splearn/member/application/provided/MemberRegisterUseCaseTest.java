@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import cwchoiit.splearn.member.SplearnTestConfiguration;
 import cwchoiit.splearn.member.domain.*;
+import jakarta.persistence.EntityManager;
 import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +16,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @SpringBootTest
 @Import(SplearnTestConfiguration.class)
-class MemberRegisterUseCaseSpringBootTest {
+class MemberRegisterUseCaseTest {
 
     @Autowired MemberRegisterUseCase memberRegisterUseCase;
+    @Autowired EntityManager entityManager;
 
     @Test
     void register() {
@@ -39,6 +41,21 @@ class MemberRegisterUseCaseSpringBootTest {
                                         MemberFixture.createMemberRegisterPayload(
                                                 "noreply@example.com")))
                 .isInstanceOf(DuplicateEmailException.class);
+    }
+
+    @Test
+    void activate() {
+        Member member =
+                memberRegisterUseCase.register(
+                        MemberFixture.createMemberRegisterPayload("noreply@example.com"));
+        entityManager.flush();
+        entityManager.clear();
+
+        member = memberRegisterUseCase.activate(member.getId());
+
+        entityManager.flush();
+
+        assertThat(member.isActive()).isTrue();
     }
 
     @Test
