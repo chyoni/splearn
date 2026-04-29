@@ -5,16 +5,19 @@ import static cwchoiit.splearn.member.domain.MemberFixture.createPasswordEncoder
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import cwchoiit.splearn.member.SplearnTestConfiguration;
 import cwchoiit.splearn.member.domain.Member;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @SpringBootTest
+@Import(SplearnTestConfiguration.class)
 class MemberRepositoryTest {
 
     @Autowired MemberRepository memberRepository;

@@ -1,17 +1,15 @@
 package cwchoiit.splearn.member.application;
 
-import cwchoiit.splearn.member.application.provided.MemberRegister;
+import cwchoiit.splearn.member.application.provided.MemberRegisterUseCase;
 import cwchoiit.splearn.member.application.required.EmailSender;
 import cwchoiit.splearn.member.application.required.MemberRepository;
-import cwchoiit.splearn.member.domain.Member;
-import cwchoiit.splearn.member.domain.MemberRegisterPayload;
-import cwchoiit.splearn.member.domain.PasswordEncoder;
+import cwchoiit.splearn.member.domain.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class MemberService implements MemberRegister {
+public class MemberService implements MemberRegisterUseCase {
 
     private final MemberRepository memberRepository;
     private final EmailSender emailSender;
@@ -19,12 +17,25 @@ public class MemberService implements MemberRegister {
 
     @Override
     public Member register(MemberRegisterPayload memberRegisterPayload) {
+        checkDuplicateEmail(memberRegisterPayload);
+
         Member member = Member.register(memberRegisterPayload, passwordEncoder);
 
         memberRepository.save(member);
 
-        emailSender.send(member.getEmail(), "등록을 완료해주세요", "아래 링크를 클릭해서 등록을 완료해주세요");
+        sendWelcomeEmail(member);
 
         return member;
+    }
+
+    private void sendWelcomeEmail(Member member) {
+        emailSender.send(member.getEmail(), "등록을 완료해주세요", "아래 링크를 클릭해서 등록을 완료해주세요");
+    }
+
+    private void checkDuplicateEmail(MemberRegisterPayload memberRegisterPayload) {
+        if (memberRepository.findByEmail(new Email(memberRegisterPayload.email())).isPresent()) {
+            throw new DuplicateEmailException(
+                    "Already exists email: " + memberRegisterPayload.email());
+        }
     }
 }
