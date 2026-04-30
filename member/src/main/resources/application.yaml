@@ -18,9 +18,6 @@ spring:
     activate:
       on-profile: local
   jpa:
-    hibernate:
-      ddl-auto: create-drop
-    open-in-view: false
     show-sql: true
     properties:
       hibernate:
