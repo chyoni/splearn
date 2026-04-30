@@ -60,12 +60,12 @@ class MemberRegisterUseCaseTest {
 
     @Test
     void memberRegisterPayloadFail() {
-        extracted(new MemberRegisterPayload("noreply@example.com", "c", "long_password"));
-        extracted(new MemberRegisterPayload("noreply@example.com", "cwchoiit", "pw"));
-        extracted(new MemberRegisterPayload("invalid", "cwchoiit", "long_password"));
+        checkValidation(new MemberRegisterPayload("noreply@example.com", "c", "long_password"));
+        checkValidation(new MemberRegisterPayload("noreply@example.com", "cwchoiit", "pw"));
+        checkValidation(new MemberRegisterPayload("invalid", "cwchoiit", "long_password"));
     }
 
-    private void extracted(MemberRegisterPayload invalid) {
+    private void checkValidation(MemberRegisterPayload invalid) {
         assertThatThrownBy(() -> memberRegisterUseCase.register(invalid))
                 .isInstanceOf(ConstraintViolationException.class);
     }
