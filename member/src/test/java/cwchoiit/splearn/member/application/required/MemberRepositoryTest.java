@@ -7,6 +7,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import cwchoiit.splearn.member.SplearnTestConfiguration;
 import cwchoiit.splearn.member.domain.Member;
+import cwchoiit.splearn.member.domain.MemberStatus;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,12 @@ class MemberRepositoryTest {
         entityManager.flush();
 
         assertThat(member.getId()).isNotNull();
+
+        entityManager.clear();
+
+        Member findMember = memberRepository.findById(member.getId()).orElseThrow();
+        assertThat(findMember.getStatus()).isEqualTo(MemberStatus.PENDING);
+        assertThat(findMember.getDetail().getRegisteredAt()).isNotNull();
     }
 
     @Test

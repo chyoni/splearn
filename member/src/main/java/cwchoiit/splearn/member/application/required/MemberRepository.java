@@ -1,7 +1,7 @@
 package cwchoiit.splearn.member.application.required;
 
-import cwchoiit.splearn.member.domain.Email;
 import cwchoiit.splearn.member.domain.Member;
+import cwchoiit.splearn.member.domain.vo.Email;
 import java.util.Optional;
 import org.springframework.data.repository.Repository;
 

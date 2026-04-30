@@ -4,7 +4,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import cwchoiit.splearn.member.SplearnTestConfiguration;
-import cwchoiit.splearn.member.domain.*;
+import cwchoiit.splearn.member.domain.DuplicateEmailException;
+import cwchoiit.splearn.member.domain.Member;
+import cwchoiit.splearn.member.domain.MemberFixture;
+import cwchoiit.splearn.member.domain.MemberStatus;
+import cwchoiit.splearn.member.domain.payload.MemberRegisterPayload;
 import jakarta.persistence.EntityManager;
 import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Test;

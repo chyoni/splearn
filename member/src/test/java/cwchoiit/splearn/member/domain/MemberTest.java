@@ -5,6 +5,7 @@ import static cwchoiit.splearn.member.domain.MemberFixture.createPasswordEncoder
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import cwchoiit.splearn.member.domain.payload.MemberInfoUpdatePayload;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -24,13 +25,17 @@ class MemberTest {
     @Test
     void registerMember() {
         assertThat(member.getStatus()).isEqualTo(MemberStatus.PENDING);
+        assertThat(member.getDetail().getRegisteredAt()).isNotNull();
     }
 
     @Test
     void activate() {
+        assertThat(member.getDetail().getActivatedAt()).isNull();
+
         member.activate();
 
         assertThat(member.getStatus()).isEqualTo(MemberStatus.ACTIVE);
+        assertThat(member.getDetail().getActivatedAt()).isNotNull();
     }
 
     @Test
@@ -44,8 +49,12 @@ class MemberTest {
     void deactivate() {
         member.activate();
 
+        assertThat(member.getDetail().getDeactivatedAt()).isNull();
+
         member.deactivate();
+
         assertThat(member.getStatus()).isEqualTo(MemberStatus.DEACTIVATED);
+        assertThat(member.getDetail().getDeactivatedAt()).isNotNull();
     }
 
     @Test
@@ -71,6 +80,19 @@ class MemberTest {
         member.changeNickname("newCwchoiit");
 
         assertThat(member.getNickname()).isEqualTo("newCwchoiit");
+    }
+
+    @Test
+    void update() {
+        member.activate();
+
+        MemberInfoUpdatePayload updatePayload =
+                new MemberInfoUpdatePayload("holy_holo", "holy", "my_intro");
+        member.update(updatePayload);
+
+        assertThat(member.getNickname()).isEqualTo(updatePayload.nickname());
+        assertThat(member.getDetail().getProfile().profile()).isEqualTo(updatePayload.profile());
+        assertThat(member.getDetail().getIntroduction()).isEqualTo(updatePayload.introduction());
     }
 
     @Test

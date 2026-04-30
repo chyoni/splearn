@@ -3,7 +3,13 @@ package cwchoiit.splearn.member.domain;
 import static java.util.Objects.requireNonNull;
 import static org.springframework.util.Assert.state;
 
+import cwchoiit.splearn.member.domain.payload.MemberInfoUpdatePayload;
+import cwchoiit.splearn.member.domain.payload.MemberRegisterPayload;
+import cwchoiit.splearn.member.domain.vo.Email;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +18,7 @@ import org.hibernate.annotations.NaturalId;
 
 @Entity
 @Getter
-@ToString(callSuper = true)
+@ToString(callSuper = true, exclude = "detail")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends BaseEntity {
     @NaturalId private Email email;
@@ -23,6 +29,9 @@ public class Member extends BaseEntity {
 
     private MemberStatus status;
 
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private MemberDetail detail;
+
     public static Member register(
             MemberRegisterPayload registerPayload, PasswordEncoder passwordEncoder) {
         Member member = new Member();
@@ -31,6 +40,7 @@ public class Member extends BaseEntity {
         member.nickname = requireNonNull(registerPayload.nickname());
         member.passwordHash = requireNonNull(passwordEncoder.encode(registerPayload.password()));
         member.status = MemberStatus.PENDING;
+        member.detail = MemberDetail.create();
 
         return member;
     }
@@ -39,12 +49,14 @@ public class Member extends BaseEntity {
         state(this.status == MemberStatus.PENDING, "Member is already active.");
 
         this.status = MemberStatus.ACTIVE;
+        this.detail.activate();
     }
 
     public void deactivate() {
         state(this.status == MemberStatus.ACTIVE, "Member is already deactivated.");
 
         this.status = MemberStatus.DEACTIVATED;
+        this.detail.deactivate();
     }
 
     public boolean verifyPassword(String password, PasswordEncoder passwordEncoder) {
@@ -53,6 +65,11 @@ public class Member extends BaseEntity {
 
     public void changeNickname(String nickname) {
         this.nickname = requireNonNull(nickname);
+    }
+
+    public void update(MemberInfoUpdatePayload updatePayload) {
+        this.nickname = requireNonNull(updatePayload.nickname());
+        this.detail.update(updatePayload);
     }
 
     public void changePassword(String password, PasswordEncoder passwordEncoder) {

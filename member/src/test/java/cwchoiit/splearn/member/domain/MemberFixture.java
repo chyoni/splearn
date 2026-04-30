@@ -1,5 +1,6 @@
 package cwchoiit.splearn.member.domain;
 
+import cwchoiit.splearn.member.domain.payload.MemberRegisterPayload;
 import org.jspecify.annotations.NonNull;
 
 public class MemberFixture {

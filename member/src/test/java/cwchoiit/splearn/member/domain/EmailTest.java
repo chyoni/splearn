@@ -2,6 +2,7 @@ package cwchoiit.splearn.member.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import cwchoiit.splearn.member.domain.vo.Email;
 import org.junit.jupiter.api.Test;
 
 class EmailTest {

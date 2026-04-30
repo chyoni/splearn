@@ -1,4 +1,4 @@
-package cwchoiit.splearn.member.domain;
+package cwchoiit.splearn.member.domain.payload;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;

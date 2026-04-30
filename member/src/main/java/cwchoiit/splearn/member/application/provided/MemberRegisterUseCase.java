@@ -1,7 +1,7 @@
 package cwchoiit.splearn.member.application.provided;
 
 import cwchoiit.splearn.member.domain.Member;
-import cwchoiit.splearn.member.domain.MemberRegisterPayload;
+import cwchoiit.splearn.member.domain.payload.MemberRegisterPayload;
 import jakarta.validation.Valid;
 
 /** 회원을 등록한다. */

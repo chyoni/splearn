@@ -1,4 +1,4 @@
-package cwchoiit.splearn.member.domain;
+package cwchoiit.splearn.member.domain.vo;
 
 import java.util.regex.Pattern;
 

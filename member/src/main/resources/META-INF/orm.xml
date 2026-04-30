@@ -36,10 +36,39 @@
         </attributes>
     </entity>
 
-    <embeddable class="cwchoiit.splearn.member.domain.Email">
+    <entity class="cwchoiit.splearn.member.domain.MemberDetail">
+        <table name="member_detail">
+        </table>
+        <attributes>
+            <basic name="introduction">
+                <column name="introduction" nullable="true" length="500"/>
+            </basic>
+            <basic name="registeredAt">
+                <column name="registered_at" nullable="false"/>
+            </basic>
+            <basic name="activatedAt">
+                <column name="activated_at" nullable="true"/>
+            </basic>
+            <basic name="deactivatedAt">
+                <column name="deactivated_at" nullable="true"/>
+            </basic>
+            <embedded name="profile">
+            </embedded>
+        </attributes>
+    </entity>
+
+    <embeddable class="cwchoiit.splearn.member.domain.vo.Email">
         <attributes>
             <basic name="email">
                 <column name="email" nullable="false" length="150"/>
+            </basic>
+        </attributes>
+    </embeddable>
+
+    <embeddable class="cwchoiit.splearn.member.domain.vo.Profile">
+        <attributes>
+            <basic name="profile">
+                <column name="profile" nullable="true" length="15"/>
             </basic>
         </attributes>
     </embeddable>

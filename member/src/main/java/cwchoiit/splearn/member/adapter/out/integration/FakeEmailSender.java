@@ -1,7 +1,7 @@
 package cwchoiit.splearn.member.adapter.out.integration;
 
 import cwchoiit.splearn.member.application.required.EmailSender;
-import cwchoiit.splearn.member.domain.Email;
+import cwchoiit.splearn.member.domain.vo.Email;
 import org.springframework.stereotype.Component;
 
 @Component
