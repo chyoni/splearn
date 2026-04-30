@@ -37,6 +37,8 @@ spring-restdocs = { group = "org.springframework.restdocs", name = "spring-restd
 jjwt-api = "io.jsonwebtoken:jjwt-api:0.12.3"
 jjwt-impl = "io.jsonwebtoken:jjwt-impl:0.12.3"
 jjwt-jackson = "io.jsonwebtoken:jjwt-jackson:0.12.3"
+spring-security-core = { group = "org.springframework.security", name = "spring-security-core", version = "7.0.5" }
+
 
 # Testing
 junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junit" }
