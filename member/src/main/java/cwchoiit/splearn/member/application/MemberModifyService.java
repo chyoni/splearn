@@ -7,6 +7,7 @@ import cwchoiit.splearn.member.application.required.MemberRepository;
 import cwchoiit.splearn.member.domain.DuplicateEmailException;
 import cwchoiit.splearn.member.domain.Member;
 import cwchoiit.splearn.member.domain.PasswordEncoder;
+import cwchoiit.splearn.member.domain.payload.MemberInfoUpdatePayload;
 import cwchoiit.splearn.member.domain.payload.MemberRegisterPayload;
 import cwchoiit.splearn.member.domain.vo.Email;
 import jakarta.validation.Valid;
@@ -45,6 +46,25 @@ public class MemberModifyService implements MemberRegisterUseCase {
         Member findMember = memberLoadUseCase.find(memberId);
 
         findMember.activate();
+
+        return memberRepository.save(findMember);
+    }
+
+    @Override
+    public Member deactivate(Long memberId) {
+        Member findMember = memberLoadUseCase.find(memberId);
+
+        findMember.deactivate();
+
+        return memberRepository.save(findMember);
+    }
+
+    @Override
+    public Member updateInfo(
+            @Valid MemberInfoUpdatePayload memberInfoUpdatePayload, Long memberId) {
+        Member findMember = memberLoadUseCase.find(memberId);
+
+        findMember.update(memberInfoUpdatePayload);
 
         return memberRepository.save(findMember);
     }

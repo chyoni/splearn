@@ -8,6 +8,7 @@ import cwchoiit.splearn.member.domain.DuplicateEmailException;
 import cwchoiit.splearn.member.domain.Member;
 import cwchoiit.splearn.member.domain.MemberFixture;
 import cwchoiit.splearn.member.domain.MemberStatus;
+import cwchoiit.splearn.member.domain.payload.MemberInfoUpdatePayload;
 import cwchoiit.splearn.member.domain.payload.MemberRegisterPayload;
 import jakarta.persistence.EntityManager;
 import jakarta.validation.ConstraintViolationException;
@@ -60,6 +61,50 @@ class MemberRegisterUseCaseTest {
         entityManager.flush();
 
         assertThat(member.isActive()).isTrue();
+    }
+
+    @Test
+    void deactivate() {
+        Member member =
+                memberRegisterUseCase.register(
+                        MemberFixture.createMemberRegisterPayload("noreply@example.com"));
+        entityManager.flush();
+        entityManager.clear();
+
+        member = memberRegisterUseCase.activate(member.getId());
+
+        entityManager.flush();
+        entityManager.clear();
+
+        assertThat(member.isActive()).isTrue();
+
+        member = memberRegisterUseCase.deactivate(member.getId());
+
+        entityManager.flush();
+        entityManager.clear();
+
+        assertThat(member.getStatus()).isEqualTo(MemberStatus.DEACTIVATED);
+        assertThat(member.getDetail().getDeactivatedAt()).isNotNull();
+    }
+
+    @Test
+    void updateInfo() {
+        Member member =
+                memberRegisterUseCase.register(
+                        MemberFixture.createMemberRegisterPayload("noreply@example.com"));
+        entityManager.flush();
+        entityManager.clear();
+
+        member = memberRegisterUseCase.activate(member.getId());
+
+        entityManager.flush();
+        entityManager.clear();
+
+        member =
+                memberRegisterUseCase.updateInfo(
+                        new MemberInfoUpdatePayload("LuLu100", "lulu100", "자기소개"), member.getId());
+
+        assertThat(member.getDetail().getProfile().profile()).isEqualTo("lulu100");
     }
 
     @Test

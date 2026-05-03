@@ -6,10 +6,7 @@ import static org.springframework.util.Assert.state;
 import cwchoiit.splearn.member.domain.payload.MemberInfoUpdatePayload;
 import cwchoiit.splearn.member.domain.payload.MemberRegisterPayload;
 import cwchoiit.splearn.member.domain.vo.Email;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,7 +26,6 @@ public class Member extends BaseEntity {
 
     private MemberStatus status;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private MemberDetail detail;
 
     public static Member register(
