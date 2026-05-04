@@ -10,6 +10,7 @@ import cwchoiit.splearn.member.domain.PasswordEncoder;
 import cwchoiit.splearn.member.domain.payload.MemberInfoUpdatePayload;
 import cwchoiit.splearn.member.domain.payload.MemberRegisterPayload;
 import cwchoiit.splearn.member.domain.vo.Email;
+import cwchoiit.splearn.member.domain.vo.Profile;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -64,9 +65,26 @@ public class MemberModifyService implements MemberRegisterUseCase {
             @Valid MemberInfoUpdatePayload memberInfoUpdatePayload, Long memberId) {
         Member findMember = memberLoadUseCase.find(memberId);
 
+        checkDuplicateProfile(findMember, memberInfoUpdatePayload.profile());
+
         findMember.update(memberInfoUpdatePayload);
 
         return memberRepository.save(findMember);
+    }
+
+    private void checkDuplicateProfile(Member member, String profile) {
+        if (profile.isEmpty()) {
+            return;
+        }
+
+        Profile currentProfile = member.getDetail().getProfile();
+        if (currentProfile != null && profile.equals(currentProfile.profile())) {
+            return;
+        }
+
+        if (memberRepository.findByProfile(new Profile(profile)).isPresent()) {
+            throw new IllegalArgumentException("Already exists profile address : " + profile);
+        }
     }
 
     private void sendWelcomeEmail(Member member) {

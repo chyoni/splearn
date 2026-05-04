@@ -74,15 +74,6 @@ class MemberTest {
     }
 
     @Test
-    void changeNickname() {
-        assertThat(member.getNickname()).isEqualTo("cwchoiit");
-
-        member.changeNickname("newCwchoiit");
-
-        assertThat(member.getNickname()).isEqualTo("newCwchoiit");
-    }
-
-    @Test
     void update() {
         member.activate();
 
@@ -93,6 +84,15 @@ class MemberTest {
         assertThat(member.getNickname()).isEqualTo(updatePayload.nickname());
         assertThat(member.getDetail().getProfile().profile()).isEqualTo(updatePayload.profile());
         assertThat(member.getDetail().getIntroduction()).isEqualTo(updatePayload.introduction());
+    }
+
+    @Test
+    void updateFail() {
+        MemberInfoUpdatePayload updatePayload =
+                new MemberInfoUpdatePayload("holy_holo", "holy", "my_intro");
+
+        assertThatThrownBy(() -> member.update(updatePayload))
+                .isInstanceOf(IllegalStateException.class);
     }
 
     @Test

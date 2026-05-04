@@ -6,7 +6,8 @@ public record Profile(String profile) {
     private static final Pattern PROFILE_ADDRESS_PATTERN = Pattern.compile("[a-z0-9]+");
 
     public Profile {
-        if (!PROFILE_ADDRESS_PATTERN.matcher(profile).matches()) {
+        if (profile == null
+                || (!profile.isEmpty() && !PROFILE_ADDRESS_PATTERN.matcher(profile).matches())) {
             throw new IllegalArgumentException("Invalid profile address: " + profile);
         }
 

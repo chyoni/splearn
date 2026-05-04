@@ -110,18 +110,21 @@ _Entity_
 - `activate()`: 등록을 완료 시킨다
 - `deactivate()`: 탈퇴시킨다
 - `verifyPassword()`: 비밀번호를 검증한다
-- `changeNickname()`: 닉네임을 변경한다
 - `changePassword()`: 패스워드를 변경한다
+- `update()`: 회원의 닉네임, 프로필 주소, 자기 소개를 수정한다
 #### 규칙
 - 회원 생성 후 상태는 등록 대기
 - 일정조건을 만족하면 등록 완료가 된다
 - 등록 대기 상태에서만 등록 완료가 될 수 있다
 - 등록 완료 상태에서는 탈퇴할 수 있다
 - 회원의 비밀번호는 해시를 만들어서 저장한다
+- 등록 완료 상태에서만 회원 정보를 수정할 수 있다
 
 ### 회원 상세(MemberDetail) - Aggregate Member
+_Entity_
+#### 속성
 - `id`: `Long`
-- `profile`: 프로필 주소
+- `profile`: 프로필 주소. 모든 회원이 고유한 프로필 주소를 가져야 한다
 - `introduction`: 자기 소개
 - `registeredAt`: 등록 일시
 - `activatedAt`: 등록 완료 일시
@@ -131,6 +134,9 @@ _Entity_
 - `activate()`: 등록 완료: `activatedAt`
 - `deactivate()`: 탈퇴: `deactivatedAt`
 - `update()`: 상세 정보 업데이트: `profile`, `introduction`
+#### 규칙
+- 프로필 주소는 중복을 허용하지 않는다
+- 기존 프로필 주소를 제거할 수는 있다 (예: "AA" -> "")
 
 ### 회원 상태(MemberStatus)
 _Enum_
@@ -151,7 +157,12 @@ _Domain Service_
 ### Email
 _Value Object_
 #### 속성
-- address: 이메일주소
+- email: 이메일주소
+
+### Profile
+_Value Object_
+#### 속성
+- profile: 프로필주소
 ---
 
 ### 강사

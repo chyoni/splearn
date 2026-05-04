@@ -59,11 +59,9 @@ public class Member extends BaseEntity {
         return passwordEncoder.matches(password, this.passwordHash);
     }
 
-    public void changeNickname(String nickname) {
-        this.nickname = requireNonNull(nickname);
-    }
-
     public void update(MemberInfoUpdatePayload updatePayload) {
+        state(this.status == MemberStatus.ACTIVE, "Update action only for accessible active user");
+
         this.nickname = requireNonNull(updatePayload.nickname());
         this.detail.update(updatePayload);
     }
