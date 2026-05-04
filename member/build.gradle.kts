@@ -11,6 +11,7 @@ dependencies {
     implementation(libs.spring.security.core)
 
     testImplementation(libs.spring.boot.starter.test)
+    testImplementation(libs.archunit)
     runtimeOnly(libs.h2)
 }
 
